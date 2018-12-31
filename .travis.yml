@@ -1,0 +1,39 @@
+language: scala
+scala:
+- 2.12.3
+sudo: required
+services:
+- docker
+jdk:
+- oraclejdk8
+cache:
+  directories:
+  - "$HOME/.ivy2/cache"
+  - "$HOME/.sbt/boot"
+branches:
+  except:
+  - "/^[0-9]+\\.[0-9]+\\.[0-9]+/"
+addons:
+  hosts:
+before_install:
+- export SBT_OPTS="-XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256m -Xmx1g"
+- echo $SBT_OPTS
+before_script:
+before_script:
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+script:
+- sbt clean dist && set -x && unzip -d svc target/universal/*-1.0.zip && mv svc/*/* svc/ && rm svc/bin/*.bat && mv svc/bin/* svc/bin/start && rm -rf svc/*-1.0
+- docker build -t test-play-proj:v1 . 
+- docker tag test-play-proj:v1 ankitrm/test-play-proj:v1
+- docker push ankitrm/test-play-proj:v1
+after_success:
+after_script:
+before_cache:
+- find $HOME/.ivy2 -name "ivydata-*.properties" -delete
+- find $HOME/.sbt -name "*.lock" -delete
+notifications:
+  email:
+    recipients:
+    - ankitvij.23@gmail.com
+    on_success: always
+    on_failure: always
