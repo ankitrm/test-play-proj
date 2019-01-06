@@ -22,7 +22,6 @@ before_script:
 script:
 after_success:
   - pip install --user awscli && export PATH=$PATH:$HOME/.local/bin
-  - aws configure --profile SAMLUser
   - eval $(aws ecr get-login --region ap-southeast-1)
   - sbt clean dist && set -x && unzip -d svc target/universal/*-1.0.zip && mv svc/*/* svc/ && rm svc/bin/*.bat && mv svc/bin/* svc/bin/start && rm -rf svc/*-1.0
   - docker build -t test-play-proj:v1 .
