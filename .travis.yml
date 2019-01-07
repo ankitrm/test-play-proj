@@ -19,13 +19,15 @@ before_install:
 - export SBT_OPTS="-XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256m -Xmx1g"
 - echo $SBT_OPTS
 before_script:
-- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 script:
-- sbt clean dist && set -x && unzip -d svc target/universal/*-1.0.zip && mv svc/*/* svc/ && rm svc/bin/*.bat && mv svc/bin/* svc/bin/start && rm -rf svc/*-1.0
-- docker build -t test-play-proj:v1 . 
-- docker tag test-play-proj:v1 ankitrm/test-play-proj:v1
-- docker push ankitrm/test-play-proj:v1
 after_success:
+  - pip install --user awscli && export PATH=$PATH:$HOME/.local/bin
+  - eval $(aws ecr get-login --region ap-southeast-1 --no-include-email | sed 's|https://||')
+  - eval $(aws ecr create-repository --region ap-southeast-1 --repository-name test-play-proj)
+  - sbt clean dist && set -x && unzip -d svc target/universal/*-1.0.zip && mv svc/*/* svc/ && rm svc/bin/*.bat && mv svc/bin/* svc/bin/start && rm -rf svc/*-1.0
+  - docker build -t test-play-proj:v1 .
+  - docker tag test-play-proj:v1 $AWS_ECR_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/test-play-proj:v1
+  - docker push $AWS_ECR_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/test-play-proj:v1
 after_script:
 before_cache:
 - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
