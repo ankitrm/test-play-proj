@@ -1,17 +1,21 @@
----
 apiVersion: v1
+preferences: {}
+kind: Config
+
 clusters:
 - cluster:
-    certificate-authority-data:
     server:
+    certificate-authority-data:
   name: eks_terraform-eks-cluster
+
 contexts:
 - context:
     cluster: eks_terraform-eks-cluster
     user: eks_terraform-eks-cluster
   name: eks_terraform-eks-cluster
+
 current-context: eks_terraform-eks-cluster
-kind: Config
+
 users:
 - name: eks_terraform-eks-cluster
   user:
