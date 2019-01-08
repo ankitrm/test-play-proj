@@ -20,7 +20,6 @@ before_install:
 - echo $SBT_OPTS
 before_script:
 script:
-after_success:
   - pip install --user awscli && export PATH=$PATH:$HOME/.local/bin
   - eval $(aws ecr get-login --region ap-southeast-1 --no-include-email | sed 's|https://||')
   - eval $(aws ecr create-repository --region ap-southeast-1 --repository-name test-play-proj)
@@ -28,6 +27,10 @@ after_success:
   - docker build -t test-play-proj:v1 .
   - docker tag test-play-proj:v1 $AWS_ECR_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/test-play-proj:v1
   - docker push $AWS_ECR_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/test-play-proj:v1
+  - kubectl create -f ci/k8/eks-deployment.yaml
+  - kubectl create -f ci/k8/eks-service.json
+  - kubectl create -f ci/k8/eks-ingress.yaml
+after_success:
 after_script:
 before_cache:
 - find $HOME/.ivy2 -name "ivydata-*.properties" -delete

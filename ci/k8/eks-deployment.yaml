@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-play-project-microservice
+  labels:
+    app: test-play-project-microservice
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: test-play-project-microservice
+  template:
+    metadata:
+      labels:
+        app: test-play-project-microservice
+    spec:
+      containers:
+        - name: test-play-project-microservice
+          image: "$(AWS_ECR_ACCOUNT).dkr.ecr.ap-southeast-1.amazonaws.com/test-play-proj:v1"
+          ports:
+            - containerPort: 9000

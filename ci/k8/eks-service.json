@@ -1,0 +1,22 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "test-play-project-microservice",
+    "labels": {
+      "app": "test-play-project-microservice"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "port": 8888,
+        "targetPort": 9000
+      }
+    ],
+    "selector": {
+      "app": "test-play-project-microservice"
+    },
+    "type": "LoadBalancer"
+  }
+}
