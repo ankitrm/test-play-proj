@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: test-play-project-microservice
-          image: "$(AWS_ECR_ACCOUNT).dkr.ecr.ap-southeast-1.amazonaws.com/test-play-proj:v1"
+          image: "$AWS_ECR_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/test-play-proj:v1"
           ports:
             - containerPort: 9000
