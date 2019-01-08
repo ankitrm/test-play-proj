@@ -7,7 +7,9 @@ chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin/kubectl
 
 mkdir ${HOME}/.kube
-cp ci/k8/config ${HOME}/.kube/config
+sudo cp ci/k8/config ${HOME}/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
 
 # Fill out missing params in kubectl config file
 kubectl config set clusters.eks_terraform-eks-cluster.certificate-authority-data "$KUBE_CLUSTER_CERTIFICATE"
