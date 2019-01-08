@@ -15,6 +15,8 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 kubectl config set clusters.eks_terraform-eks-cluster.certificate-authority-data "$KUBE_CLUSTER_CERTIFICATE"
 kubectl config set clusters.eks_terraform-eks-cluster.server "$KUBE_CLUSTER_SERVER"
 
+mv ci/k8/eks-deployment.yaml.temp ci/k8/eks-deployment.yaml | cat ci/k8/eks-deployment.yaml | sed "s/\$AWS_ECR_ACCOUNT/$AWS_ECR_ACCOUNT/g" ci/k8/eks-deployment.yaml > ci/k8/eks-deployment.yaml.temp
+
 curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.11.5/2018-12-06/bin/linux/amd64/aws-iam-authenticator
 chmod +x ./aws-iam-authenticator
 cp ./aws-iam-authenticator $HOME/bin/aws-iam-authenticator && export PATH=$HOME/bin:$PATH
