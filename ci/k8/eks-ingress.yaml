@@ -11,4 +11,4 @@ spec:
           - path: /
             backend:
               serviceName: "test-play-project-microservice"
-              servicePort: "9000"
+              servicePort: 9000

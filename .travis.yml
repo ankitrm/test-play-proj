@@ -30,8 +30,8 @@ script:
   - docker push $AWS_ECR_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/test-play-proj:v1
   - mv ci/k8/eks-deployment.yaml.temp ci/k8/eks-deployment.yaml | cat ci/k8/eks-deployment.yaml | sed "s/\$AWS_ECR_ACCOUNT/$AWS_ECR_ACCOUNT/g" ci/k8/eks-deployment.yaml > ci/k8/eks-deployment.yaml.temp
   - kubectl create -f ci/k8/eks-deployment.yaml
-  - kubectl create -f ci/k8/eks-service.json
-  - kubectl create -f ci/k8/eks-ingress.yaml
+  - kubectl expose deployment/test-play-project-microservice
+#  - kubectl create -f ci/k8/eks-ingress.yaml
 after_success:
 after_script:
 before_cache:
